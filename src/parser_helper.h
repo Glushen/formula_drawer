@@ -2,6 +2,7 @@
 #include <utility>
 #include <memory>
 #include <vector>
+#include "expression.h"
 
 namespace ph {
     template<typename T>
@@ -10,4 +11,6 @@ namespace ph {
         delete ptr;
         return value;
     }
+
+    std::unique_ptr<fd::exp::Expression> uniquePtr(fd::exp::Expression* expression);
 }

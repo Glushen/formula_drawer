@@ -9,6 +9,14 @@
 inf(inity)?  { yylval.expression = new fd::exp::Primitive(u8"∞"); return PRIMITIVE; }
 [a-z_][a-z_0-9]*|([0-9]+\.?[0-9]*|\.[0-9]+)(e(\+|\-)?[0-9]+)?  { yylval.expression = new fd::exp::Primitive(yytext); return PRIMITIVE; }
 
+\=\=?     { return EQUAL_OPERATOR; }
+\!\=|\<\> { return UNEQUAL_OPERATOR; }
+\<        { return LESS_OPERATOR; }
+\>        { return GREATER_OPERATOR; }
+\<\=      { return LESS_EQUAL_OPERATOR; }
+\>\=      { return GREATER_EQUAL_OPERATOR; }
+
+\^|\*|\/|\+|\-|\(|\)|\[|\]  { return yytext[0]; }
 
 [ \t\r\n]       { /* ignore */ }
 <<EOF>>         { return END_OF_FILE; }
