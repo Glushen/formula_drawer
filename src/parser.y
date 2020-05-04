@@ -11,15 +11,17 @@ extern void yy_accept_ast(fd::exp::Expression expression);
 
 %union {
     fd::exp::Expression* expression;
+    std::vector<fd::exp::Case>* cases;
 }
 
 %token END_OF_FILE
 %token <expression> PRIMITIVE
 
 %token EQUAL_OPERATOR UNEQUAL_OPERATOR LESS_OPERATOR GREATER_OPERATOR LESS_EQUAL_OPERATOR GREATER_EQUAL_OPERATOR
-%token SUM PRODUCT INTEGRAL
+%token SUM PRODUCT INTEGRAL CASES
 
 %type <expression> exp
+%type <cases> cases
 
 %left EQUAL_OPERATOR UNEQUAL_OPERATOR LESS_OPERATOR GREATER_OPERATOR LESS_EQUAL_OPERATOR GREATER_EQUAL_OPERATOR
 %left '+' '-'
@@ -53,3 +55,8 @@ exp:
 |   SUM      '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∑", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }
 |   PRODUCT  '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∏", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }
 |   INTEGRAL '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∫", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }
+|   CASES '(' cases ')'                   { $$ = new fd::exp::Cases(ph::unwrap($3)); }
+
+cases:
+    exp ',' exp            { $$ = new std::vector<fd::exp::Case>(); $$->emplace_back(ph::uniquePtr($1), ph::uniquePtr($3)); }
+|   cases ',' exp ',' exp  { $$ = $1; $$->emplace_back(ph::uniquePtr($3), ph::uniquePtr($5)); }

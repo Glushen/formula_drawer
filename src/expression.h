@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace fd::exp {
     class Expression {
@@ -72,5 +73,20 @@ namespace fd::exp {
         std::unique_ptr<Expression> body;
 
         Variadic(std::string sign, std::unique_ptr<Expression> from, std::unique_ptr<Expression> to, std::unique_ptr<Expression> body);
+    };
+
+    class Case {
+    public:
+        std::unique_ptr<Expression> body;
+        std::unique_ptr<Expression> condition;
+
+        Case(std::unique_ptr<Expression> body, std::unique_ptr<Expression> condition);
+    };
+
+    class Cases : public Expression {
+    public:
+        std::vector<Case> cases;
+
+        explicit Cases(std::vector<Case> cases);
     };
 }

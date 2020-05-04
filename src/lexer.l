@@ -9,6 +9,7 @@
 sum          { return SUM; }
 product      { return PRODUCT; }
 int(egral)?  { return INTEGRAL; }
+cases        { return CASES; }
 inf(inity)?  { yylval.expression = new fd::exp::Primitive(u8"∞"); return PRIMITIVE; }
 [a-z_][a-z_0-9]*|([0-9]+\.?[0-9]*|\.[0-9]+)(e(\+|\-)?[0-9]+)?  { yylval.expression = new fd::exp::Primitive(yytext); return PRIMITIVE; }
 
