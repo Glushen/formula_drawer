@@ -6,6 +6,9 @@
 
 %%
 
+sum          { return SUM; }
+product      { return PRODUCT; }
+int(egral)?  { return INTEGRAL; }
 inf(inity)?  { yylval.expression = new fd::exp::Primitive(u8"∞"); return PRIMITIVE; }
 [a-z_][a-z_0-9]*|([0-9]+\.?[0-9]*|\.[0-9]+)(e(\+|\-)?[0-9]+)?  { yylval.expression = new fd::exp::Primitive(yytext); return PRIMITIVE; }
 
@@ -16,7 +19,7 @@ inf(inity)?  { yylval.expression = new fd::exp::Primitive(u8"∞"); return PRIMI
 \<\=      { return LESS_EQUAL_OPERATOR; }
 \>\=      { return GREATER_EQUAL_OPERATOR; }
 
-\^|\*|\/|\+|\-|\(|\)|\[|\]  { return yytext[0]; }
+\^|\*|\/|\+|\-|\(|\)|\[|\]|\,  { return yytext[0]; }
 
 [ \t\r\n]       { /* ignore */ }
 <<EOF>>         { return END_OF_FILE; }

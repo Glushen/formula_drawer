@@ -19,3 +19,6 @@ fd::exp::Binary::Binary(std::string sign, std::unique_ptr<Expression> left, std:
 
 fd::exp::Division::Division(std::unique_ptr<Expression> top, std::unique_ptr<Expression> bottom):
     top(std::move(top)), bottom(std::move(bottom)) { }
+
+fd::exp::Variadic::Variadic(std::string sign, std::unique_ptr<Expression> from, std::unique_ptr<Expression> to, std::unique_ptr<Expression> body):
+    sign(std::move(sign)), from(std::move(from)), to(std::move(to)), body(std::move(body)) { }

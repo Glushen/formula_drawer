@@ -17,6 +17,7 @@ extern void yy_accept_ast(fd::exp::Expression expression);
 %token <expression> PRIMITIVE
 
 %token EQUAL_OPERATOR UNEQUAL_OPERATOR LESS_OPERATOR GREATER_OPERATOR LESS_EQUAL_OPERATOR GREATER_EQUAL_OPERATOR
+%token SUM PRODUCT INTEGRAL
 
 %type <expression> exp
 
@@ -49,3 +50,6 @@ exp:
 |   exp GREATER_OPERATOR exp        { $$ = new fd::exp::Binary(u8">", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp LESS_EQUAL_OPERATOR exp     { $$ = new fd::exp::Binary(u8"≤", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp GREATER_EQUAL_OPERATOR exp  { $$ = new fd::exp::Binary(u8"≥", ph::uniquePtr($1), ph::uniquePtr($3)); }
+|   SUM      '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∑", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }
+|   PRODUCT  '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∏", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }
+|   INTEGRAL '(' exp ',' exp ',' exp ')'  { $$ = new fd::exp::Variadic(u8"∫", ph::uniquePtr($3), ph::uniquePtr($5), ph::uniquePtr($7)); }

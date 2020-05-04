@@ -63,4 +63,14 @@ namespace fd::exp {
 
         Division(std::unique_ptr<Expression> top, std::unique_ptr<Expression> bottom);
     };
+
+    class Variadic : public Expression {
+    public:
+        std::string sign;
+        std::unique_ptr<Expression> from;
+        std::unique_ptr<Expression> to;
+        std::unique_ptr<Expression> body;
+
+        Variadic(std::string sign, std::unique_ptr<Expression> from, std::unique_ptr<Expression> to, std::unique_ptr<Expression> body);
+    };
 }
