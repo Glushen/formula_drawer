@@ -22,6 +22,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(
     formula_drawer_lib STATIC
     formula_drawer.cpp formula_drawer.h
+    parser_helper.h
+    expression.cpp expression.h
     ${FLEX_lexer_OUTPUTS}
     ${BISON_parser_OUTPUTS}
 )

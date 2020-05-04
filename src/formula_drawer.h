@@ -1,3 +1,11 @@
 #pragma once
 
-void yyerror(const char *s, ...);
+#include <string>
+
+namespace fd {
+    struct Result {
+        bool accepted = false;
+        std::string errorMessage;
+    };
+    Result drawExpression(const std::string& inputExpression, const std::string& outputFileName);
+}
