@@ -89,4 +89,13 @@ namespace fd::exp {
 
         explicit Cases(std::vector<Case> cases);
     };
+
+    class Matrix : public Expression {
+    public:
+        std::vector<std::vector<std::unique_ptr<Expression>>> matrix;
+
+        explicit Matrix(std::vector<std::vector<std::unique_ptr<Expression>>> matrix);
+
+        void checkCorrectness();
+    };
 }

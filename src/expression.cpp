@@ -27,3 +27,13 @@ fd::exp::Case::Case(std::unique_ptr<Expression> body, std::unique_ptr<Expression
     body(std::move(body)), condition(std::move(condition)) { }
 
 fd::exp::Cases::Cases(std::vector<Case> cases): cases(std::move(cases)) { }
+
+fd::exp::Matrix::Matrix(std::vector<std::vector<std::unique_ptr<Expression>>> matrix): matrix(std::move(matrix)) { }
+
+void fd::exp::Matrix::checkCorrectness() {
+    for (const auto& row : matrix) {
+        if (row.size() != matrix[0].size()) {
+            throw std::invalid_argument("Matrix should have rows of equal length");
+        }
+    }
+}
