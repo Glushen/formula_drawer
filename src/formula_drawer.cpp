@@ -20,7 +20,7 @@ fd::Result fd::drawExpression(const std::string& inputExpression, const std::str
     return result;
 }
 
-void yy_accept_ast(fd::exp::Expression expression) {
+void yy_accept_ast(std::unique_ptr<fd::exp::Expression> expression) {
     result.accepted = true;
     // TODO
 }

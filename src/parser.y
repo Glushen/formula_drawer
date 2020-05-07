@@ -6,7 +6,7 @@
 
 extern int yylex(void);
 extern void yyerror(const char *s, ...);
-extern void yy_accept_ast(fd::exp::Expression expression);
+extern void yy_accept_ast(std::unique_ptr<fd::exp::Expression> expression);
 }
 
 %union {
@@ -37,7 +37,7 @@ extern void yy_accept_ast(fd::exp::Expression expression);
 %%
 
 input:
-    exp END_OF_FILE  { yy_accept_ast(ph::unwrap($1)); YYACCEPT; }
+    exp END_OF_FILE  { yy_accept_ast(ph::uniquePtr($1)); YYACCEPT; }
 
 exp:
     PRIMITIVE                       { $$ = $1; }
