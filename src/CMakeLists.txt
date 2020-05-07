@@ -2,6 +2,7 @@ project(formula_drawer_lib)
 
 find_package(BISON)
 find_package(FLEX)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 bison_target(
     parser
@@ -24,6 +25,9 @@ add_library(
     formula_drawer.cpp formula_drawer.h
     parser_helper.h parser_helper.cpp
     expression.cpp expression.h
+    view.h view.cpp
     ${FLEX_lexer_OUTPUTS}
     ${BISON_parser_OUTPUTS}
 )
+
+target_link_libraries(formula_drawer_lib Qt5::Widgets)
