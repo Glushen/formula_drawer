@@ -60,6 +60,7 @@ void fd::v::TranslateLayout::onMeasure() {
 }
 
 void fd::v::TranslateLayout::onLayout() {
+    child->layout();
     child->x = 0;
     child->y = targetCy < 0 ? std::abs(targetCy) : 0;
 }
@@ -80,6 +81,7 @@ void fd::v::ScaleLayout::onMeasure() {
 }
 
 void fd::v::ScaleLayout::onLayout() {
+    child->layout();
     child->x = 0;
     child->y = 0;
 }
@@ -105,6 +107,7 @@ void fd::v::AutoscaleLayout::onMeasure() {
 }
 
 void fd::v::AutoscaleLayout::onLayout() {
+    child->layout();
     child->x = 0;
     child->y = 0;
 }
@@ -160,6 +163,7 @@ void fd::v::HorizontalLayout::onMeasure() {
 void fd::v::HorizontalLayout::onLayout() {
     qreal currentX = 0;
     for (auto& child : children) {
+        child->layout();
         child->x = currentX;
         currentX += child->w;
         child->y = cy - child->cy;
@@ -185,6 +189,8 @@ void fd::v::FractionLayout::onMeasure() {
 }
 
 void fd::v::FractionLayout::onLayout() {
+    num->layout();
+    num->measure();
     num->x = (w - num->w) / 2;
     num->y = 0;
     den->x = (w - den->w) / 2;
@@ -211,6 +217,9 @@ void fd::v::TripleVerticalLayout::onMeasure() {
 }
 
 void fd::v::TripleVerticalLayout::onLayout() {
+    top->layout();
+    center->layout();
+    bottom->layout();
     top->x = (w - top->w);
     top->y = 0;
     center->x = (w - center->w);
@@ -274,6 +283,7 @@ void fd::v::GridLayout::onLayout() {
     for (int i = 0; i < rows.size(); i++) {
         qreal currentX = 0;
         for (int j = 0; j < rows[i].size(); j++) {
+            rows[i][j]->layout();
             rows[i][j]->x = currentX + (columnWidths[j] - rows[i][j]->w) / 2;
             currentX += columnWidths[j];
             rows[i][j]->y = currentY + rowCys[i] - rows[i][j]->cy;
