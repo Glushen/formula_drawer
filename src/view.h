@@ -26,8 +26,9 @@ namespace fd::v {
     class TextView : public View {
     public:
         QString text;
+        bool variadicSymbol = false;
 
-        explicit TextView(const std::string& text);
+        explicit TextView(const std::string& text, bool variadicSymbol = false);
 
         void onMeasure() override;
         void onLayout() override;
@@ -80,7 +81,7 @@ namespace fd::v {
     };
 
     enum SmallLayoutType {
-        POWER, INDEX
+        POWER, INDEX, NONE
     };
 
     class SmallLayout : public View {

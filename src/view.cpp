@@ -23,17 +23,22 @@ qreal fd::v::View::getCyToHeightRatio() {
 }
 
 
-static QFont& getFont() {
-    static auto font = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/font.ttf")).at(0));
+static QFont& getFont(bool variadic) {
+    static auto font = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/opensans.ttf")).at(0));
+    static auto variadicFont = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/lora.ttf")).at(0));
+    if (variadic) {
+        variadicFont.setPointSizeF(100);
+        return variadicFont;
+    }
     font.setPointSizeF(50);
     return font;
 }
 
-fd::v::TextView::TextView(const std::string& text):
-    text(text.c_str()) { }
+fd::v::TextView::TextView(const std::string& text, bool variadicSymbol):
+    text(text.c_str()), variadicSymbol(variadicSymbol) { }
 
 void fd::v::TextView::onMeasure() {
-    auto fontMetrics = QFontMetricsF(getFont());
+    auto fontMetrics = QFontMetricsF(getFont(variadicSymbol));
     w = fontMetrics.boundingRect(text).width() + 12;
     h = fontMetrics.height();
     cy = h/2;
@@ -44,8 +49,8 @@ void fd::v::TextView::onLayout() {
 }
 
 void fd::v::TextView::onDraw(QPainter& painter) const {
-    painter.setFont(getFont());
-    painter.drawText(QRectF(0, 0, w, h), Qt::AlignHCenter, text);
+    painter.setFont(getFont(variadicSymbol));
+    painter.drawText(QRectF(0, variadicSymbol ? -14 : 0, w, h), Qt::AlignHCenter, text);
 }
 
 
@@ -150,13 +155,13 @@ void fd::v::SmallLayout::onMeasure() {
         child->measure();
     } else {
         isTextScaled = true;
-        child->factor = 0.6;
+        child->factor = 0.5;
         child->measure();
         isTextScaled = false;
     }
     w = child->w;
     h = child->h;
-    cy = type == POWER ? h : 0;
+    cy = type == POWER ? h : (type == INDEX ? 0 : child->cy);
 }
 
 void fd::v::SmallLayout::onLayout() {
@@ -258,12 +263,12 @@ void fd::v::TripleVerticalLayout::onLayout() {
     top->layout();
     center->layout();
     bottom->layout();
-    top->x = (w - top->w);
-    top->y = 0;
-    center->x = (w - center->w);
+    top->x = (w - top->w) / 2;
+    top->y = 20;
+    center->x = (w - center->w) / 2;
     center->y = top->h;
-    bottom->x = (w - bottom->w);
-    bottom->y = top->h + center->h;
+    bottom->x = (w - bottom->w) / 2;
+    bottom->y = top->h + center->h - 15;
 }
 
 void fd::v::TripleVerticalLayout::onDraw(QPainter& painter) const {

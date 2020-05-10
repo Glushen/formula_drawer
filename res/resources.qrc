@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/">
-        <file>font.ttf</file>
+        <file>opensans.ttf</file>
+        <file>lora.ttf</file>
     </qresource>
 </RCC>

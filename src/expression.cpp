@@ -71,9 +71,9 @@ fd::exp::Variadic::Variadic(std::string sign, std::unique_ptr<Expression> from, 
 std::unique_ptr<fd::v::View> fd::exp::Variadic::createView() {
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
     elements.push_back(std::make_unique<fd::v::TripleVerticalLayout>(
-        to->createView(),
-        std::make_unique<fd::v::TextView>(sign),
-        from->createView()
+        std::make_unique<fd::v::SmallLayout>(to->createView(), fd::v::SmallLayoutType::NONE),
+        std::make_unique<fd::v::TextView>(sign, true),
+        std::make_unique<fd::v::SmallLayout>(from->createView(), fd::v::SmallLayoutType::NONE)
     ));
     elements.push_back(body->createView());
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
