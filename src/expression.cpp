@@ -11,9 +11,9 @@ fd::exp::Bracketed::Bracketed(std::unique_ptr<Expression> expression): expressio
 
 std::unique_ptr<fd::v::View> fd::exp::Bracketed::createView() {
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
-    elements.push_back(std::make_unique<fd::v::AutoscaleLayout>(std::make_unique<fd::v::TextView>("(")));
+    elements.push_back(std::make_unique<fd::v::OpeningRoundBracketView>());
     elements.push_back(expression->createView());
-    elements.push_back(std::make_unique<fd::v::AutoscaleLayout>(std::make_unique<fd::v::TextView>(")")));
+    elements.push_back(std::make_unique<fd::v::ClosingRoundBracketView>());
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }
 
@@ -95,7 +95,7 @@ std::unique_ptr<fd::v::View> fd::exp::Cases::createView() {
     }
 
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
-    elements.push_back(std::make_unique<fd::v::AutoscaleLayout>(std::make_unique<fd::v::TextView>("{")));
+    elements.push_back(std::make_unique<fd::v::OpeningCurlyBracketView>());
     elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(rows)));
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }
@@ -122,8 +122,8 @@ std::unique_ptr<fd::v::View> fd::exp::Matrix::createView() {
     }
 
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
-    elements.push_back(std::make_unique<fd::v::AutoscaleLayout>(std::make_unique<fd::v::TextView>("(")));
+    elements.push_back(std::make_unique<fd::v::OpeningRoundBracketView>());
     elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(gridRows)));
-    elements.push_back(std::make_unique<fd::v::AutoscaleLayout>(std::make_unique<fd::v::TextView>(")")));
+    elements.push_back(std::make_unique<fd::v::ClosingRoundBracketView>());
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }

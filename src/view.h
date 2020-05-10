@@ -34,6 +34,39 @@ namespace fd::v {
         void onDraw(QPainter& painter) const override;
     };
 
+    class BracketView : public View {
+    public:
+        qreal width;
+
+        explicit BracketView(qreal width);
+
+        void onMeasure() override;
+        void onLayout() override;
+        bool isHeightSpecified() override;
+        qreal getCyToHeightRatio() override;
+    };
+
+    class OpeningRoundBracketView : public BracketView {
+    public:
+        OpeningRoundBracketView();
+
+        void onDraw(QPainter& painter) const override;
+    };
+
+    class ClosingRoundBracketView : public BracketView {
+    public:
+        ClosingRoundBracketView();
+
+        void onDraw(QPainter& painter) const override;
+    };
+
+    class OpeningCurlyBracketView : public BracketView {
+    public:
+        OpeningCurlyBracketView();
+
+        void onDraw(QPainter& painter) const override;
+    };
+
     class TranslateLayout : public View {
     public:
         std::unique_ptr<View> child;
@@ -59,24 +92,6 @@ namespace fd::v {
         void onMeasure() override;
         void onLayout() override;
         void onDraw(QPainter &painter) const override;
-    };
-
-    class AutoscaleLayout : public View {
-    public:
-        std::unique_ptr<View> child;
-
-        explicit AutoscaleLayout(std::unique_ptr<View> child);
-
-        void onMeasure() override;
-        void onLayout() override;
-        void onDraw(QPainter &painter) const override;
-
-        bool isHeightSpecified() override;
-
-        qreal getCyToHeightRatio() override;
-
-    private:
-        bool isChildMeasured = false;
     };
 
     class HorizontalLayout : public View {

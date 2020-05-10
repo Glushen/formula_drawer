@@ -34,8 +34,9 @@ void yy_accept_ast(std::unique_ptr<fd::exp::Expression> expression) {
     image.fill(QColor(255, 255, 255));
     auto painter = QPainter(&image);
     auto pen = QPen(QColor(0, 0, 0));
-    pen.setWidthF(3);
+    pen.setWidthF(4);
     painter.setPen(pen);
+    painter.setRenderHint(QPainter::Antialiasing);
     view->draw(painter);
     image.save(fileName.c_str(), "PNG", 100);
 }

@@ -49,6 +49,74 @@ void fd::v::TextView::onDraw(QPainter& painter) const {
 }
 
 
+fd::v::BracketView::BracketView(qreal width)
+    :width(width) { }
+
+void fd::v::BracketView::onMeasure() {
+    w = width;
+    cy = h/2;
+}
+
+void fd::v::BracketView::onLayout() {
+    // nothing to do
+}
+
+bool fd::v::BracketView::isHeightSpecified() {
+    return false;
+}
+
+qreal fd::v::BracketView::getCyToHeightRatio() {
+    return 0.5;
+}
+
+
+static void relCubicTo(QPainterPath& path, qreal dx1, qreal dy1, qreal dx2, qreal dy2, qreal dx, qreal dy) {
+    auto cur = path.currentPosition();
+    path.cubicTo(cur + QPointF(dx1, dy1), cur + QPointF(dx2, dy2), cur + QPointF(dx, dy));
+}
+static void relLineTo(QPainterPath& path, qreal dx, qreal dy) {
+    path.lineTo(path.currentPosition() + QPointF(dx, dy));
+}
+
+
+fd::v::OpeningRoundBracketView::OpeningRoundBracketView():
+    BracketView(22) { }
+
+void fd::v::OpeningRoundBracketView::onDraw(QPainter& painter) const {
+    QPainterPath path(QPointF(18, 16));
+    relCubicTo(path, -5.654, 5.654, -7, 12, -7, 24);
+    relLineTo(path, 0, h - 76);
+    relCubicTo(path, 0, 12, 1.346, 18.346, 7, 24);
+    painter.drawPath(path);
+}
+
+fd::v::ClosingRoundBracketView::ClosingRoundBracketView():
+    BracketView(22) { }
+
+void fd::v::ClosingRoundBracketView::onDraw(QPainter& painter) const {
+    QPainterPath path(QPointF(4, 16));
+    relCubicTo(path, 5.654, 5.654, 7, 12, 7, 24);
+    relLineTo(path, 0, h - 76);
+    relCubicTo(path, 0, 12, -1.346, 18.346, -7, 24);
+    painter.drawPath(path);
+}
+
+fd::v::OpeningCurlyBracketView::OpeningCurlyBracketView():
+    BracketView(38) { }
+
+void fd::v::OpeningCurlyBracketView::onDraw(QPainter& painter) const {
+    QPainterPath path(QPointF(31, 15));
+    auto verticalElementLength = h / 2 - 36;
+    relCubicTo(path, -7.9975, 0.11854, -11, 2.505, -11, 10.5);
+    relLineTo(path, 0, verticalElementLength);
+    relCubicTo(path, 0, 8.0013, -2.9972, 12, -11, 12);
+    relCubicTo(path, 8.0028, 0, 11, 3.9987, 11, 12);
+    relLineTo(path, 0, verticalElementLength);
+    relCubicTo(path, 0, 7.995, 3.0025, 10.381, 11, 10.5);
+    painter.drawPath(path);
+}
+
+
 fd::v::TranslateLayout::TranslateLayout(std::unique_ptr<View> child, qreal translationY):
     child(std::move(child)), translationY(translationY) { }
 
@@ -99,45 +167,6 @@ void fd::v::ScaleLayout::onDraw(QPainter& painter) const {
     painter.scale(factor, factor);
     child->draw(painter);
     painter.scale(1 / factor, 1 / factor);
-}
-
-
-fd::v::AutoscaleLayout::AutoscaleLayout(std::unique_ptr<View> child):
-    child(std::move(child)) { }
-
-void fd::v::AutoscaleLayout::onMeasure() {
-    if (!isChildMeasured) {
-        child->measure();
-        isChildMeasured = true;
-    }
-    auto scaleFactor = h / child->h;
-    w = child->w * scaleFactor;
-    cy = child->cy * scaleFactor;
-}
-
-void fd::v::AutoscaleLayout::onLayout() {
-    child->layout();
-    child->x = 0;
-    child->y = 0;
-}
-
-void fd::v::AutoscaleLayout::onDraw(QPainter& painter) const {
-    auto scaleFactor = h / child->h;
-    painter.scale(scaleFactor, scaleFactor);
-    child->draw(painter);
-    painter.scale(1 / scaleFactor, 1 / scaleFactor);
-}
-
-bool fd::v::AutoscaleLayout::isHeightSpecified() {
-    return false;
-}
-
-qreal fd::v::AutoscaleLayout::getCyToHeightRatio() {
-    if (!isChildMeasured) {
-        child->measure();
-        isChildMeasured = true;
-    }
-    return child->cy / child->h;
 }
 
 
