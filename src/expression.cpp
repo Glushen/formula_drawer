@@ -23,7 +23,7 @@ fd::exp::Power::Power(std::unique_ptr<Expression> base, std::unique_ptr<Expressi
 std::unique_ptr<fd::v::View> fd::exp::Power::createView() {
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
     elements.push_back(base->createView());
-    elements.push_back(std::make_unique<fd::v::TranslateLayout>(std::make_unique<fd::v::ScaleLayout>(power->createView(), 0.5), -10));
+    elements.push_back(std::make_unique<fd::v::SmallLayout>(power->createView(), fd::v::SmallLayoutType::POWER));
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }
 
@@ -33,7 +33,7 @@ fd::exp::Index::Index(std::unique_ptr<Expression> base, std::unique_ptr<Expressi
 std::unique_ptr<fd::v::View> fd::exp::Index::createView() {
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
     elements.push_back(base->createView());
-    elements.push_back(std::make_unique<fd::v::TranslateLayout>(std::make_unique<fd::v::ScaleLayout>(index->createView(), 0.5), 10));
+    elements.push_back(std::make_unique<fd::v::SmallLayout>(index->createView(), fd::v::SmallLayoutType::INDEX));
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }
 

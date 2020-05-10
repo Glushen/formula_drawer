@@ -117,36 +117,6 @@ void fd::v::OpeningCurlyBracketView::onDraw(QPainter& painter) const {
 }
 
 
-fd::v::TranslateLayout::TranslateLayout(std::unique_ptr<View> child, qreal translationY):
-    child(std::move(child)), translationY(translationY) { }
-
-void fd::v::TranslateLayout::onMeasure() {
-    child->measure();
-    w = child->w;
-    targetCy = child->cy - translationY;
-    if (targetCy < 0) {
-        h = child->h + std::abs(targetCy);
-        cy = 0;
-    } else if (targetCy > child->h) {
-        h = targetCy;
-        cy = targetCy;
-    } else {
-        h = child->h;
-        cy = targetCy;
-    }
-}
-
-void fd::v::TranslateLayout::onLayout() {
-    child->layout();
-    child->x = 0;
-    child->y = targetCy < 0 ? std::abs(targetCy) : 0;
-}
-
-void fd::v::TranslateLayout::onDraw(QPainter& painter) const {
-    child->draw(painter);
-}
-
-
 fd::v::ScaleLayout::ScaleLayout(std::unique_ptr<View> child, qreal factor):
     child(std::move(child)), factor(factor) { }
 
@@ -167,6 +137,36 @@ void fd::v::ScaleLayout::onDraw(QPainter& painter) const {
     painter.scale(factor, factor);
     child->draw(painter);
     painter.scale(1 / factor, 1 / factor);
+}
+
+
+fd::v::SmallLayout::SmallLayout(std::unique_ptr<View> child, fd::v::SmallLayoutType type)
+    : child(std::make_unique<ScaleLayout>(std::move(child), 1)), type(type) { }
+
+void fd::v::SmallLayout::onMeasure() {
+    static auto isTextScaled = false;
+    if (isTextScaled) {
+        child->factor = 1;
+        child->measure();
+    } else {
+        isTextScaled = true;
+        child->factor = 0.6;
+        child->measure();
+        isTextScaled = false;
+    }
+    w = child->w;
+    h = child->h;
+    cy = type == POWER ? h : 0;
+}
+
+void fd::v::SmallLayout::onLayout() {
+    child->layout();
+    child->x = 0;
+    child->y = 0;
+}
+
+void fd::v::SmallLayout::onDraw(QPainter& painter) const {
+    child->draw(painter);
 }
 
 

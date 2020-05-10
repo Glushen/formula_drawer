@@ -67,21 +67,6 @@ namespace fd::v {
         void onDraw(QPainter& painter) const override;
     };
 
-    class TranslateLayout : public View {
-    public:
-        std::unique_ptr<View> child;
-        qreal translationY;
-
-        TranslateLayout(std::unique_ptr<View> child, qreal translationY);
-
-        void onMeasure() override;
-        void onLayout() override;
-        void onDraw(QPainter& painter) const override;
-
-    private:
-        qreal targetCy = 0;
-    };
-
     class ScaleLayout : public View {
     public:
         std::unique_ptr<View> child;
@@ -92,6 +77,22 @@ namespace fd::v {
         void onMeasure() override;
         void onLayout() override;
         void onDraw(QPainter &painter) const override;
+    };
+
+    enum SmallLayoutType {
+        POWER, INDEX
+    };
+
+    class SmallLayout : public View {
+    public:
+        std::unique_ptr<ScaleLayout> child;
+        SmallLayoutType type;
+
+        SmallLayout(std::unique_ptr<View> child, SmallLayoutType type);
+
+        void onMeasure() override;
+        void onLayout() override;
+        void onDraw(QPainter& painter) const override;
     };
 
     class HorizontalLayout : public View {
