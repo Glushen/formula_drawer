@@ -2,8 +2,12 @@
 #include <string>
 #include <iostream>
 #include <formula_drawer.h>
+#include <QApplication>
 
 int main(int argc, char** argv) {
+    QApplication application(argc, argv);
+    QApplication::processEvents();
+
     std::vector<std::string> arguments;
     for (int i = 1; i < argc; i++) {
         arguments.emplace_back(argv[i]);
