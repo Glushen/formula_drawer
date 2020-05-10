@@ -49,8 +49,8 @@ void fd::v::TextView::onDraw(QPainter& painter) const {
 }
 
 
-fd::v::BracketView::BracketView(qreal width)
-    :width(width) { }
+fd::v::BracketView::BracketView(qreal width):
+    width(width) { }
 
 void fd::v::BracketView::onMeasure() {
     w = width;
@@ -192,7 +192,7 @@ void fd::v::HorizontalLayout::onMeasure() {
             continue;
         }
         auto cyToHeight = child->getCyToHeightRatio();
-        child->h = 2 * std::min(cyToHeight, 1 - cyToHeight) * h;
+        child->h = std::min(cy / cyToHeight, hMinusCy / (1 - cyToHeight));
         child->measure();
         w += child->w;
     }
