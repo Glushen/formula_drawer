@@ -294,9 +294,10 @@ void fd::v::GridLayout::onMeasure() {
             currentCy = std::max(currentCy, view->cy);
             currentHMinusCy = std::max(currentHMinusCy, view->h - view->cy);
         }
-        rowCys.push_back(currentCy);
-        rowHeights.push_back(currentHMinusCy + currentCy);
-        h += currentHMinusCy + currentCy;
+        rowCys.push_back(currentCy + 12);
+        auto height = currentHMinusCy + currentCy + 24;
+        rowHeights.push_back(height);
+        h += height;
         columnsCount = std::max(columnsCount, row.size());
     }
 
@@ -309,6 +310,7 @@ void fd::v::GridLayout::onMeasure() {
                 currentW = std::max(currentW, row[i]->w);
             }
         }
+        currentW += 24;
         columnWidths.push_back(currentW);
         w += currentW;
     }
