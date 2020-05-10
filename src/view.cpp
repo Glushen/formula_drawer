@@ -22,11 +22,19 @@ qreal fd::v::View::getCyToHeightRatio() {
     return cy / h;
 }
 
-fd::v::TextView::TextView(const std::string& text): text(text.c_str()) { }
+
+static QFont& getFont() {
+    static auto font = QFont();
+    font.setPointSizeF(50);
+    return font;
+}
+
+fd::v::TextView::TextView(const std::string& text):
+    text(text.c_str()) { }
 
 void fd::v::TextView::onMeasure() {
-    static auto fontMetrics = QFontMetricsF(QFont());
-    w = fontMetrics.horizontalAdvance(text);
+    auto fontMetrics = QFontMetricsF(getFont());
+    w = fontMetrics.boundingRect(text).width() + 12;
     h = fontMetrics.height();
     cy = h/2;
 }
@@ -36,7 +44,8 @@ void fd::v::TextView::onLayout() {
 }
 
 void fd::v::TextView::onDraw(QPainter& painter) const {
-    painter.drawText(0, 0, text);
+    painter.setFont(getFont());
+    painter.drawText(QRectF(0, 0, w, h), Qt::AlignHCenter, text);
 }
 
 
@@ -140,7 +149,7 @@ void fd::v::HorizontalLayout::onMeasure() {
     cy = 0;
     qreal hMinusCy = 0;
     for (auto& child : children) {
-        if (!isHeightSpecified()) {
+        if (!child->isHeightSpecified()) {
             continue;
         }
         child->measure();
@@ -150,7 +159,7 @@ void fd::v::HorizontalLayout::onMeasure() {
     }
     h = hMinusCy + cy;
     for (auto& child : children) {
-        if (isHeightSpecified()) {
+        if (child->isHeightSpecified()) {
             continue;
         }
         auto cyToHeight = child->getCyToHeightRatio();
@@ -183,14 +192,14 @@ fd::v::FractionLayout::FractionLayout(std::unique_ptr<View> num, std::unique_ptr
 void fd::v::FractionLayout::onMeasure() {
     num->measure();
     den->measure();
-    w = std::max(num->w, den->w);
+    w = std::max(num->w, den->w) + 6;
     h = num->h + den->h;
     cy = num->h;
 }
 
 void fd::v::FractionLayout::onLayout() {
     num->layout();
-    num->measure();
+    den->layout();
     num->x = (w - num->w) / 2;
     num->y = 0;
     den->x = (w - den->w) / 2;
@@ -199,7 +208,7 @@ void fd::v::FractionLayout::onLayout() {
 
 void fd::v::FractionLayout::onDraw(QPainter& painter) const {
     num->draw(painter);
-    painter.drawLine(0, cy, w, cy);
+    painter.drawLine(QLineF(4, cy, w-4, cy));
     den->draw(painter);
 }
 
