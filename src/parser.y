@@ -49,7 +49,7 @@ exp:
 |   exp '*' exp                     { $$ = new fd::exp::Binary(u8"⋅", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp '/' exp                     { $$ = new fd::exp::Division(ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp '+' exp                     { $$ = new fd::exp::Binary(u8"+", ph::uniquePtr($1), ph::uniquePtr($3)); }
-|   exp '-' exp                     { $$ = new fd::exp::Binary(u8"‒", ph::uniquePtr($1), ph::uniquePtr($3)); }
+|   exp '-' exp                     { $$ = new fd::exp::Binary(u8"−", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp EQUAL_OPERATOR exp          { $$ = new fd::exp::Binary(u8"=", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp UNEQUAL_OPERATOR exp        { $$ = new fd::exp::Binary(u8"≠", ph::uniquePtr($1), ph::uniquePtr($3)); }
 |   exp LESS_OPERATOR exp           { $$ = new fd::exp::Binary(u8"<", ph::uniquePtr($1), ph::uniquePtr($3)); }

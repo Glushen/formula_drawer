@@ -24,7 +24,7 @@ qreal fd::v::View::getCyToHeightRatio() {
 
 
 static QFont& getFont() {
-    static auto font = QFont();
+    static auto font = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/font.ttf")).at(0));
     font.setPointSizeF(50);
     return font;
 }
