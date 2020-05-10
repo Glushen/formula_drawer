@@ -273,7 +273,8 @@ void fd::v::TripleVerticalLayout::onDraw(QPainter& painter) const {
 }
 
 
-fd::v::GridLayout::GridLayout(std::vector<std::vector<std::unique_ptr<View>>> rows): rows(std::move(rows)) { }
+fd::v::GridLayout::GridLayout(std::vector<std::vector<std::unique_ptr<View>>> rows, bool alignCenter):
+    rows(std::move(rows)), alignCenter(alignCenter) { }
 
 void fd::v::GridLayout::onMeasure() {
     w = 0;
@@ -324,7 +325,7 @@ void fd::v::GridLayout::onLayout() {
         qreal currentX = 0;
         for (int j = 0; j < rows[i].size(); j++) {
             rows[i][j]->layout();
-            rows[i][j]->x = currentX + (columnWidths[j] - rows[i][j]->w) / 2;
+            rows[i][j]->x = currentX + (alignCenter ? (columnWidths[j] - rows[i][j]->w) / 2 : 12);
             currentX += columnWidths[j];
             rows[i][j]->y = currentY + rowCys[i] - rows[i][j]->cy;
         }

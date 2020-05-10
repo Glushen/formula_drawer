@@ -87,16 +87,26 @@ fd::exp::Cases::Cases(std::vector<Case> cases): cases(std::move(cases)) { }
 std::unique_ptr<fd::v::View> fd::exp::Cases::createView() {
     auto rows = std::vector<std::vector<std::unique_ptr<fd::v::View>>>();
 
-    for (auto& aCase : cases) {
+    for (int i = 0; i < cases.size(); i++) {
+        auto bodyElements = std::vector<std::unique_ptr<fd::v::View>>();
+        bodyElements.push_back(cases[i].body->createView());
+        bodyElements.push_back(std::make_unique<fd::v::TextView>(","));
+
+        auto conditionElements = std::vector<std::unique_ptr<fd::v::View>>();
+        conditionElements.push_back(std::make_unique<fd::v::TextView>("if "));
+        conditionElements.push_back(cases[i].condition->createView());
+        conditionElements.push_back(std::make_unique<fd::v::TextView>(i < cases.size() - 1 ? ";" : "."));
+
         auto elements = std::vector<std::unique_ptr<fd::v::View>>();
-        elements.push_back(aCase.body->createView());
-        elements.push_back(aCase.condition->createView());
+        elements.push_back(std::make_unique<fd::v::HorizontalLayout>(std::move(bodyElements)));
+        elements.push_back(std::make_unique<fd::v::HorizontalLayout>(std::move(conditionElements)));
+
         rows.push_back(std::move(elements));
     }
 
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
     elements.push_back(std::make_unique<fd::v::OpeningCurlyBracketView>());
-    elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(rows)));
+    elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(rows), false));
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }
 
@@ -123,7 +133,7 @@ std::unique_ptr<fd::v::View> fd::exp::Matrix::createView() {
 
     auto elements = std::vector<std::unique_ptr<fd::v::View>>();
     elements.push_back(std::make_unique<fd::v::OpeningRoundBracketView>());
-    elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(gridRows)));
+    elements.push_back(std::make_unique<fd::v::GridLayout>(std::move(gridRows), true));
     elements.push_back(std::make_unique<fd::v::ClosingRoundBracketView>());
     return std::make_unique<fd::v::HorizontalLayout>(std::move(elements));
 }

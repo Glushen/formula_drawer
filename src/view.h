@@ -134,8 +134,9 @@ namespace fd::v {
     class GridLayout : public View {
     public:
         std::vector<std::vector<std::unique_ptr<View>>> rows;
+        bool alignCenter;
 
-        explicit GridLayout(std::vector<std::vector<std::unique_ptr<View>>> rows);
+        GridLayout(std::vector<std::vector<std::unique_ptr<View>>> rows, bool alignCenter);
 
         void onMeasure() override;
         void onLayout() override;
